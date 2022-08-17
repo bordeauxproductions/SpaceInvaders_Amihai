@@ -7,6 +7,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -6077101071915566973, guid: 15fbf4c837334af4eb28518be2da44d6, type: 3}
+      propertyPath: animationSprites.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -6077101071915566973, guid: 15fbf4c837334af4eb28518be2da44d6, type: 3}
+      propertyPath: animationSprites.Array.data[0]
+      value: 
+      objectReference: {fileID: 21300000, guid: faa33742ca0e31347b439b55fb7cecfd, type: 3}
+    - target: {fileID: -6077101071915566973, guid: 15fbf4c837334af4eb28518be2da44d6, type: 3}
+      propertyPath: animationSprites.Array.data[1]
+      value: 
+      objectReference: {fileID: 21300000, guid: f71a1796fdbee8e49b6f314e661ba7e1, type: 3}
     - target: {fileID: 221036390353961498, guid: 15fbf4c837334af4eb28518be2da44d6, type: 3}
       propertyPath: m_Name
       value: Invader_02
