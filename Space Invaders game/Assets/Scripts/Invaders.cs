@@ -44,7 +44,7 @@ public class Invaders : MonoBehaviour
     void Update()
     {
         //Moving the Invaders::
-        this.transform.position += _direction * this.speed * Time.deltaTime; //Moving to the right
+        this.transform.position += _direction * this.speed * Time.deltaTime; //The movement itself (right or left)
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero); //Left edge of the screen
         Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right); //Right edge of the screen
 
