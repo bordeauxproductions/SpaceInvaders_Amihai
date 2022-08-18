@@ -9,8 +9,13 @@ public class Invaders : MonoBehaviour
     public int rows = 5;
     public int columns = 11;
     public Invader[] prefabs;
-    public float speed = 1.0f;
+    public AnimationCurve speed;
     private Vector3 _direction = Vector2.right;
+
+    public int amountKilled { get; private set; }
+    public int totalInvaders => this.rows * this.columns;
+    public float percentKilled => (float)this.amountKilled / (float) this.totalInvaders;
+
 
     private void Awake()
     {
@@ -23,7 +28,7 @@ public class Invaders : MonoBehaviour
             for (int col = 0; col < columns; col++)
             {
                 Invader invader = Instantiate(this.prefabs[row], this.transform); //creating the invader
-
+                invader.killed += InvaderKilled; //Invoked whenever the invader was 'killed'
                 //setting the starting position for the invaders, while spacing them apart from each other
                 Vector3 position = rowPosition; 
                 position.x += col * 2.0f;
@@ -44,7 +49,7 @@ public class Invaders : MonoBehaviour
     void Update()
     {
         //Moving the Invaders::
-        this.transform.position += _direction * this.speed * Time.deltaTime; //The movement itself (right or left)
+        this.transform.position += _direction * this.speed.Evaluate(this.percentKilled) * Time.deltaTime; //The movement itself (right or left)
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero); //Left edge of the screen
         Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right); //Right edge of the screen
 
@@ -74,5 +79,10 @@ public class Invaders : MonoBehaviour
         Vector3 position = this.transform.position; //The current position
         position.y -= 1.0f; //Moving the position down a row
         this.transform.position = position; 
+    }
+
+    private void InvaderKilled()
+    {
+        this.amountKilled++;
     }
 }
