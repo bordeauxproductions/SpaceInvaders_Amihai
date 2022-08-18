@@ -24,8 +24,11 @@ public class Projectile : MonoBehaviour
     //When the projectile (laser) collides with something in the game - hence using the trigger box in the Collider2D in Unity.
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        //Sort of a callback to notify other scripts that are using this Projectile object, that this Object is being destroyed.
-        this.destroyed.Invoke();
+        if (this.destroyed != null)
+        {
+            //Sort of a callback to notify other scripts that are using this Projectile object, that this Object is being destroyed.
+            this.destroyed.Invoke();
+        }
         Destroy(this.gameObject);
     }
 }
