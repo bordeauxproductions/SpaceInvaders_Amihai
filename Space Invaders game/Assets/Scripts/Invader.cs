@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,6 +10,8 @@ public class Invader : MonoBehaviour
 
     private SpriteRenderer _spriteRenderer;
     private int _animationFrame;
+
+    public Action killed;
 
     private void Awake()
     {
@@ -38,5 +41,16 @@ public class Invader : MonoBehaviour
     void Update()
     {
         
+    }
+
+    //When colliding with another object
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //Confirming that the collisions is with a Laser object
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Laser"))
+        {
+            this.gameObject.SetActive(false);
+            this.killed.Invoke(); //Notify the Invaders object that this particular Invader wall killed
+        }
     }
 }
