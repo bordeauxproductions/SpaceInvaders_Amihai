@@ -10,9 +10,12 @@ public class Invaders : MonoBehaviour
     public int columns = 11;
     public Invader[] prefabs;
     public AnimationCurve speed;
+    public float missileAttackRate = 1.0f;
     private Vector3 _direction = Vector2.right;
+    public Projectile missilePrefab;
 
     public int amountKilled { get; private set; }
+    public int amountAlive => this.totalInvaders - this.amountKilled;
     public int totalInvaders => this.rows * this.columns;
     public float percentKilled => (float)this.amountKilled / (float) this.totalInvaders;
 
@@ -42,14 +45,15 @@ public class Invaders : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        //Reapeat every "missileAttackRate" amount of time - "Sending Missiles"
+        InvokeRepeating(nameof(MissileAttacks), this.missileAttackRate, this.missileAttackRate);
     }
 
     // Update is called once per frame
     void Update()
     {
         //Moving the Invaders::
-        this.transform.position += _direction * this.speed.Evaluate(this.percentKilled) * Time.deltaTime; //The movement itself (right or left)
+        this.transform.position += _direction * this.speed.Evaluate(this.percentKilled) * Time.deltaTime; //The movement itself (right or left) - evaluated by dynamic parameters 
         Vector3 leftEdge = Camera.main.ViewportToWorldPoint(Vector3.zero); //Left edge of the screen
         Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right); //Right edge of the screen
 
@@ -84,5 +88,23 @@ public class Invaders : MonoBehaviour
     private void InvaderKilled()
     {
         this.amountKilled++;
+    }
+
+    private void MissileAttacks()
+    {
+        foreach (Transform invader in this.transform) //For: Transform of each Invader
+        {
+            if (!invader.gameObject.activeInHierarchy)
+            {
+                continue;
+            }
+
+            if(Random.value < (1.0f / (float)this.amountAlive)) //Randomise the chances that a missile would be fired 
+            {
+                //Meaning that if there are a lot of Invaders alive, the chances of firing a missile are smaller (and vice versa)
+                Instantiate(this.missilePrefab, invader.position, Quaternion.identity);
+                break; //this guarantees that only one missile would be fired during this attack 
+            }
+        }       
     }
 }
