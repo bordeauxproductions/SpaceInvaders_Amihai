@@ -5779,7 +5779,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rows: 5
-  columns: 11
+  columns: 7
   prefabs:
   - {fileID: 5606480138106344600, guid: a18258db60d0bab419d4d0585660276e, type: 3}
   - {fileID: 5606480138106344600, guid: a18258db60d0bab419d4d0585660276e, type: 3}
