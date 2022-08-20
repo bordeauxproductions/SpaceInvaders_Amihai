@@ -68,4 +68,6 @@ public class Player : MonoBehaviour
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
+
+    //TODO:: Add Borders to the game... the player can't leave the borders of the game
 }
