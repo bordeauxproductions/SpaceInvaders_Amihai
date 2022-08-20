@@ -9,11 +9,10 @@ using Unity.VisualScripting;
 public class MysteryShip : MonoBehaviour
 {
     private Vector3 orgPosition;
-    private float delay = 0.0f;
+    private float delay = 1.0f;
     private float repeatTime = 10.0f;
-    private float speed = 30.0f;
+    private float speed = 0.06f;
     private bool isActive;
-    private Vector3 rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right); //Right edge of the screen
     private Vector3 direction = Vector2.right;
 
     private void Awake()
@@ -32,13 +31,15 @@ public class MysteryShip : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var position = new Vector3(0.06f, 0.0f, 0.0f);
-        this.transform.position += position;
-        if (this.transform.position.x >= 14.0f) //TODO::change this to Right edge of screen Instead of Magic Number
+        var position = new Vector3(speed, 0.0f, 0.0f);
+        this.transform.position += position; //moving the Mystery Ship to the right
+
+        // if (this.transform.position.x >= 14.0f) //TODO::change this to Right edge of screen Instead of Magic Number
+        if (this.transform.position.x >= 14.0f)
         {
             isActive = false;
             this.transform.position = orgPosition;
-            this.gameObject.SetActive(false); //we have reached the end of the screen or been hit by a laser
+            this.gameObject.SetActive(false); //we have reached the end of the screen
         }
     }
 
@@ -67,7 +68,7 @@ public class MysteryShip : MonoBehaviour
         {
             isActive = false;
             this.transform.position = orgPosition;
-            this.gameObject.SetActive(false); //we have reached the end of the screen or been hit by a laser
+            this.gameObject.SetActive(false); //we have been hit by a laser
             //TODO:: Add logic of adding score if the ship was hit by the laser
         }
     }
