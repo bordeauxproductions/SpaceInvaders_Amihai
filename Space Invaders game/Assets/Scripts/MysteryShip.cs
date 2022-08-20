@@ -11,7 +11,7 @@ public class MysteryShip : MonoBehaviour
     private Vector3 orgPosition;
     private float delay = 1.0f;
     private float repeatTime = 10.0f;
-    private float speed = 0.06f;
+    private float speed = 15.0f;
     private bool isActive;
     private Vector3 direction = Vector2.right;
 
@@ -31,16 +31,15 @@ public class MysteryShip : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        var position = new Vector3(speed, 0.0f, 0.0f);
+        var position = new Vector3(direction.x * speed * Time.deltaTime, 0.0f, 0.0f);
         this.transform.position += position; //moving the Mystery Ship to the right
 
-        // if (this.transform.position.x >= 14.0f) //TODO::change this to Right edge of screen Instead of Magic Number
-        if (this.transform.position.x >= 14.0f)
+       /* if (this.transform.position.x >= 14.0f) //TODO::change this to Right edge of screen Instead of Magic Number
         {
             isActive = false;
             this.transform.position = orgPosition;
             this.gameObject.SetActive(false); //we have reached the end of the screen
-        }
+        } */
     }
 
     private void mysteryShipMovement()
@@ -64,11 +63,13 @@ public class MysteryShip : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //Making sure that the collision is with a laser
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Laser"))
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Laser") ||
+            collision.gameObject.layer == LayerMask.NameToLayer("RightBorder"))
         {
             isActive = false;
             this.transform.position = orgPosition;
-            this.gameObject.SetActive(false); //we have been hit by a laser
+            this.gameObject.SetActive(false); //we have been hit by a laser or we have reached the right border
+
             //TODO:: Add logic of adding score if the ship was hit by the laser
         }
     }
