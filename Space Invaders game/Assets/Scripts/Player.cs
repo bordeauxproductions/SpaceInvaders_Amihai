@@ -8,6 +8,12 @@ public class Player : MonoBehaviour
     public Projectile laserPrefab;
     public float speed = 5.0f;
     public bool _laserActive;
+    private Vector3 orgPosition;
+
+    private void Awake()
+    {
+        orgPosition = transform.position;
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -67,7 +73,15 @@ public class Player : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
-    }
 
-    //TODO:: Add Borders to the game... the player can't leave the borders of the game
+        if (collision.gameObject.layer == LayerMask.NameToLayer("LeftBorder"))
+        {
+            this.transform.position = new Vector3(this.transform.position.x + 0.5f, orgPosition.y, orgPosition.z);
+        }
+
+        if (collision.gameObject.layer == LayerMask.NameToLayer("RightBorder"))
+        {
+            this.transform.position = new Vector3(this.transform.position.x - 0.5f, orgPosition.y, orgPosition.z);
+        }
+    }
 }
