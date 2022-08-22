@@ -12,13 +12,12 @@ public class MysteryShip : MonoBehaviour
     private float delay = 1.0f;
     private float repeatTime = 10.0f;
     private float speed = 15.0f;
-    private bool isActive;
     private Vector3 direction = Vector2.right;
+    [SerializeField] private int score = 500;
 
     private void Awake()
     {
         this.gameObject.SetActive(false);
-        isActive = false;
         orgPosition = this.transform.position;
         InvokeRepeating(nameof(mysteryShipMovement), delay, repeatTime);
     }
@@ -33,6 +32,7 @@ public class MysteryShip : MonoBehaviour
     {
         var position = new Vector3(direction.x * speed * Time.deltaTime, 0.0f, 0.0f);
         this.transform.position += position; //moving the Mystery Ship to the right
+       // GetComponent<Rigidbody2D>().AddForce(new Vector3((new Vector2()).x * speed, orgPosition.y, 0.0f), ForceMode2D.Impulse);
 
        /* if (this.transform.position.x >= 14.0f) //TODO::change this to Right edge of screen Instead of Magic Number
         {
@@ -45,7 +45,6 @@ public class MysteryShip : MonoBehaviour
     private void mysteryShipMovement()
     {
        // var rightEdge = Camera.main.ViewportToWorldPoint(Vector3.right); //Right edge of the screen
-        isActive = true;
         this.gameObject.SetActive(true);
        // this.GetComponent<Rigidbody>().AddForce(speed, 0.0f, 0.0f);
 
@@ -63,14 +62,17 @@ public class MysteryShip : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         //Making sure that the collision is with a laser
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Laser") ||
-            collision.gameObject.layer == LayerMask.NameToLayer("RightBorder"))
-        {
-            isActive = false;
-            this.transform.position = orgPosition;
-            this.gameObject.SetActive(false); //we have been hit by a laser or we have reached the right border
+        if (!(collision.gameObject.layer == LayerMask.NameToLayer("Laser") ||
+            collision.gameObject.layer == LayerMask.NameToLayer("RightBorder"))) return;
 
-            //TODO:: Add logic of adding score if the ship was hit by the laser
+        //we have been hit by a laser or we have reached the right border
+        this.transform.position = orgPosition;
+        this.gameObject.SetActive(false); 
+
+        //if the collision was with the player's Laser
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Laser"))
+        {
+            GameManager.Instance.updateScore(score);
         }
     }
 

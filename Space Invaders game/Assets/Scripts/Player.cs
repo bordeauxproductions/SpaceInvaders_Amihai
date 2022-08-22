@@ -68,20 +68,37 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Invader") || 
-            collision.gameObject.layer == LayerMask.NameToLayer("Missile"))
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Missile"))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            //Making the player "blink"
+            Invoke("EnablePlayerBlink", 0.0f);
+            Invoke("DiasblePlayerBlink", 0.15f);
+            GameManager.Instance.updateLives(0);
         }
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("LeftBorder"))
+        if(collision.gameObject.layer == LayerMask.NameToLayer("Invader"))
+        {
+            GameManager.Instance.updateLives(-1);
+        }
+
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("LeftBorder"))
         {
             this.transform.position = new Vector3(this.transform.position.x + 0.5f, orgPosition.y, orgPosition.z);
         }
 
-        if (collision.gameObject.layer == LayerMask.NameToLayer("RightBorder"))
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("RightBorder"))
         {
             this.transform.position = new Vector3(this.transform.position.x - 0.5f, orgPosition.y, orgPosition.z);
         }
+    }
+
+    private void EnablePlayerBlink()
+    {
+        this.gameObject.SetActive(false);
+    }
+
+    private void DiasblePlayerBlink()
+    {
+        this.gameObject.SetActive(true);
     }
 }
