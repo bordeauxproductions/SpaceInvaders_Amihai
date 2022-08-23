@@ -73,12 +73,12 @@ public class Player : MonoBehaviour
             //Making the player "blink"
             Invoke("EnablePlayerBlink", 0.0f);
             Invoke("DiasblePlayerBlink", 0.15f);
-            GameManager.Instance.updateLives(0);
+            GameManager.Instance.UpdateLives(0);
         }
 
         if(collision.gameObject.layer == LayerMask.NameToLayer("Invader"))
         {
-            GameManager.Instance.updateLives(-1);
+            GameManager.Instance.UpdateLives(-1);
         }
 
         else if (collision.gameObject.layer == LayerMask.NameToLayer("LeftBorder"))
