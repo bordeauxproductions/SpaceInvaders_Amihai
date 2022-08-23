@@ -15,6 +15,7 @@ public class Invaders : MonoBehaviour
     private Vector3 _direction = Vector2.right;
     public Projectile missilePrefab;
 
+
     public int amountKilled { get; private set; }
     public int amountAlive => this.totalInvaders - this.amountKilled;
     public int totalInvaders => this.rows * this.columns;
