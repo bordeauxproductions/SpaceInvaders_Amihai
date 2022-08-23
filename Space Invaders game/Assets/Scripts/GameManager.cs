@@ -34,27 +34,39 @@ public class GameManager : MonoBehaviour
 
     }
 
-    public void updateScore(int score)
+    public void UpdateScore(int score)
     {
         this.score += score;
         GameObject.Find("ScoreText").GetComponent<Text>().text = "Score: " + this.score;
-        if (this.score > highscore) updateHighScore();
+        if (this.score > highscore) UpdateHighScore();
     }
 
-    public void updateLives(int lives)
+    public void UpdateLives(int lives)
     {
         this.lives--;
         GameObject.Find("LivesText").GetComponent<Text>().text = "Lives: " + this.lives;
-        if (this.score > highscore) updateHighScore();
+        if (this.score > highscore) UpdateHighScore();
 
         if (this.lives <= 0 || lives == -1) //"lives == -1" Means that we were hit by an Invader - Game Over
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             //Replace this later with Game Over Logic
         }
+
+        else
+        {
+            Time.timeScale = 0.5f;
+            Invoke(nameof(ReactionTime), 0.5f);
+        }
+
     }
 
-    private void updateHighScore()
+    private void ReactionTime()
+    {
+        Time.timeScale = 1.0f;
+    }
+
+    private void UpdateHighScore()
     {
         highscore = score;
         GameObject.Find("HighscoreText").GetComponent<Text>().text = "Highscore: " + highscore;

@@ -62,6 +62,6 @@ public class Invader : MonoBehaviour
     {
         this.gameObject.SetActive(false);
         this.killed.Invoke(); //Notify the Invaders object that this particular Invader wall killed
-        GameManager.Instance.updateScore(score);
+        GameManager.Instance.UpdateScore(score);
     }
 }
