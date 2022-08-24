@@ -121,6 +121,12 @@ public class Player : MonoBehaviour
             this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - 0.5f, orgPosition.z);
         }
 
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("BottomBorder"))
+        {
+            hitEdgeOfScreen.Play(); // sound effect
+            this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 0.5f, orgPosition.z);
+        }
+
         else if (collision.gameObject.layer == LayerMask.NameToLayer("Default")) //Collision with a bunker
         {
             hitEdgeOfScreen.Play(); // sound effect
