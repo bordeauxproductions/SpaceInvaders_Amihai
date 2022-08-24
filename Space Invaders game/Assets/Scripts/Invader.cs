@@ -12,8 +12,8 @@ public class Invader : MonoBehaviour
     private SpriteRenderer _spriteRenderer;
     private int _animationFrame;
     [SerializeField] private int score = 100;
-
     [SerializeField] private Sprite killed_Sprite;
+    [SerializeField] private AudioSource hitByLaser;
 
     public Action killed;
 
@@ -53,6 +53,7 @@ public class Invader : MonoBehaviour
         //Confirming that the collisions is with a Laser object
         if(collision.gameObject.layer == LayerMask.NameToLayer("Laser"))
         {
+            hitByLaser.Play(); //sound effect
             _spriteRenderer.sprite = killed_Sprite;
             _spriteRenderer.color = Color.cyan;
             Invoke(nameof(kill_Invader), 0.1f);
