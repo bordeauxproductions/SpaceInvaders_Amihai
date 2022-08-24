@@ -9,10 +9,15 @@ public class Player : MonoBehaviour
     public float speed = 5.0f;
     public bool _laserActive;
     private Vector3 orgPosition;
+    [SerializeField] private AudioSource hitEdgeOfScreen;
+    [SerializeField] private AudioSource hitByMissile;
+    private Vector3 curr_Position;
+    private Rigidbody2D rigidbody;
 
     private void Awake()
     {
         orgPosition = transform.position;
+        rigidbody = GetComponent<Rigidbody2D>();
     }
 
     // Start is called before the first frame update
@@ -37,12 +42,28 @@ public class Player : MonoBehaviour
             this.transform.position += Vector3.right * this.speed * Time.deltaTime;
         }
 
+        //Player movement: Up & Down - not an 'else if' because we want to be able to move up & right at the same time for example.
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))
+        {
+            this.transform.position += Vector3.up * this.speed * Time.deltaTime;
+        }
+
+        else if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))
+        {
+            this.transform.position += Vector3.down * this.speed * Time.deltaTime;
+        }
+
         //Shooting 'laser'
         //Here we want to use 'GetKeyDown' since we want to shoot only once even if the key is pressed down (and not spray automatically).
         if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButtonDown(0))
         {
             Shoot();
         }
+    }
+
+    private void FixedUpdate()
+    {
+        curr_Position = rigidbody.position;
     }
 
     //Shooting the 'laser'
@@ -70,25 +91,41 @@ public class Player : MonoBehaviour
     {
         if(collision.gameObject.layer == LayerMask.NameToLayer("Missile"))
         {
+            hitByMissile.Play(); // sound effect
             //Making the player "blink"
             Invoke("EnablePlayerBlink", 0.0f);
             Invoke("DiasblePlayerBlink", 0.15f);
             GameManager.Instance.UpdateLives(0);
         }
 
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Invader"))
+        else if(collision.gameObject.layer == LayerMask.NameToLayer("Invader"))
         {
-            GameManager.Instance.UpdateLives(-1);
+            GameManager.Instance.UpdateLives(-1); //Ending the game
         }
 
         else if (collision.gameObject.layer == LayerMask.NameToLayer("LeftBorder"))
         {
-            this.transform.position = new Vector3(this.transform.position.x + 0.5f, orgPosition.y, orgPosition.z);
+            hitEdgeOfScreen.Play(); // sound effect
+            this.transform.position = new Vector3(this.transform.position.x + 0.5f, this.transform.position.y, orgPosition.z);
         }
 
         else if (collision.gameObject.layer == LayerMask.NameToLayer("RightBorder"))
         {
-            this.transform.position = new Vector3(this.transform.position.x - 0.5f, orgPosition.y, orgPosition.z);
+            hitEdgeOfScreen.Play(); // sound effect
+            this.transform.position = new Vector3(this.transform.position.x - 0.5f, this.transform.position.y, orgPosition.z);
+        }
+
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("PlayerBorder"))
+        {
+            hitEdgeOfScreen.Play(); // sound effect
+            this.transform.position = new Vector3(this.transform.position.x, this.transform.position.y - 0.5f, orgPosition.z);
+        }
+
+        else if (collision.gameObject.layer == LayerMask.NameToLayer("Default")) //Collision with a bunker
+        {
+            hitEdgeOfScreen.Play(); // sound effect
+            this.transform.position -= (((Vector3)rigidbody.position) - curr_Position).normalized * 0.1f;
+            //rigidbody.velocity = Vector3.zero;
         }
     }
 
