@@ -14,6 +14,7 @@ public class Invaders : MonoBehaviour
     public float missileAttackRate = 1.0f;
     private Vector3 _direction = Vector2.right;
     public Projectile missilePrefab;
+    private int playerPos = -10; //magic number - represents the player's Y position
 
 
     public int amountKilled { get; private set; }
@@ -84,7 +85,12 @@ public class Invaders : MonoBehaviour
 
         Vector3 position = this.transform.position; //The current position
         position.y -= 1.0f; //Moving the position down a row
-        this.transform.position = position; 
+        this.transform.position = position;
+
+        if (this.transform.position.y <= playerPos) //The Invaders came too close to the player.
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name); //Reloading the scene - restarting the game
+        }
     }
 
     private void InvaderKilled()
